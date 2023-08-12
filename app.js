@@ -9,7 +9,7 @@ const passport = require("passport");
 const MongoStore = require("connect-mongo");
 
 const app = express();
-const port = 5000 || process.env.PORT;
+const PORT = 5000 || process.env.PORT;
 
 app.use(
   session({
@@ -50,6 +50,6 @@ app.get("*", function (req, res) {
   res.status(404).render("404");
 });
 
-app.listen(port, () => {
-  console.log(`App listening on port ${port}`);
+app.listen(PORT, () => {
+  console.log(`App listening on port ${PORT}`);
 });
