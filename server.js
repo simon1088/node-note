@@ -9,7 +9,7 @@ const passport = require("passport");
 const MongoStore = require("connect-mongo");
 
 const app = express();
-const PORT = 5000 || process.env.PORT;
+const PORT = process.env.PORT;
 
 app.use(
   session({
@@ -29,15 +29,14 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(methodOverride("_method"));
 // Conntect to Database
-connectDB();
 
 // Static Files
 app.use(express.static("public"));
 
 // Templating Engine
+app.set("view engine", "ejs");
 app.use(expressLayouts);
 app.set("layout", "./layouts/main");
-app.set("view engine", "ejs");
 
 // Routes
 app.use("/", require("./server/routes/auth"));
@@ -46,10 +45,11 @@ app.use("/", require("./server/routes/dashboard"));
 
 // Handle 404
 app.get("*", function (req, res) {
-  //res.status(404).send('404 Page Not Found.')
   res.status(404).render("404");
 });
 
-app.listen(PORT, () => {
-  console.log(`App listening on port ${PORT}`);
+connectDB().then(() => {
+  app.listen(PORT, () => {
+    console.log(`App listening on port ${PORT}`);
+  });
 });
